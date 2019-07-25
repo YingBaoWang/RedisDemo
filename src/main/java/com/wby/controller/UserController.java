@@ -40,6 +40,7 @@ public class UserController {
     @RequestMapping(value = "/AddUser", method = RequestMethod.POST)
     public void addUser(HttpServletResponse response,HttpServletRequest request) throws Exception {
         System.out.println("******addUser********");
+        
         String userName = request.getParameter("userName");
         String pwd = request.getParameter("pwd");
         UserInfo userInfo = userInfoService.insertUser(userName, pwd);
