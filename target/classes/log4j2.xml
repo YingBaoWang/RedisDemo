@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="off" monitorInterval="1800">
+    <properties>
+        <property name="LOG_HOME">D:/eclipse/logs_redisdemo</property>
+        <property name="FILE_NAME">mylog</property>
+    </properties>
+	
+    <Appenders>
+	   	<File name="File" fileName="${LOG_HOME}/${FILE_NAME}.log">
+	      <PatternLayout>
+	        <Pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread][%file:%line] - %msg%n</Pattern>
+	      </PatternLayout>
+	    </File>
+	    <Console name="Console" target="SYSTEM_OUT">
+	      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+	    </Console>
+	    
+    </Appenders>
+
+    <Loggers>
+        <!--<Logger name="com.test.app" level="trace" additivity="true">-->
+            <!--<AppenderRef ref="running-log"/>-->
+        <!--</Logger>-->
+        <Logger name="com.wby" level="DEBUG" additivity="true">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Root level="error">
+            <AppenderRef ref="Console" level="ERROR"/>
+            <AppenderRef ref="File" level="ERROR"/>
+        </Root>
+    </Loggers>
+</Configuration>

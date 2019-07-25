@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	
+	<context:component-scan base-package="com.wby.*">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+	</context:component-scan>
+
+
+	<mybatis-spring:scan base-package="com.wby.dao" />
+
+
+	<context:property-placeholder location="classpath:config.properties" />
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClass}"></property>
+		<property name="connectionInitSqls" value="set names utf8mb4;"></property>
+		<property name="url" value="${jdbc.url}"></property>
+		<property name="username" value="${jdbc.user}"></property>
+		<property name="password" value="${jdbc.pwd}"></property>
+		<property name="initialSize" value="${jdbc.initPoolSize}"></property>
+		<property name="minIdle" value="1"></property>
+		<property name="maxActive" value="${jdbc.maxPoolSize}"></property>
+		<property name="maxWait" value="60000"></property>
+		<property name="timeBetweenEvictionRunsMillis" value="60000"></property>
+		<property name="minEvictableIdleTimeMillis" value="300000"></property>
+		<property name="validationQuery" value="select 1"></property>
+		<property name="testWhileIdle" value="true"></property>
+		<property name="testOnBorrow" value="false"></property>
+		<property name="testOnReturn" value="false"></property>
+		<property name="poolPreparedStatements" value="false"></property>
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="-1"></property>
+		<property name="filters" value="stat"></property>
+	</bean>
+	
+
+	<!-- <context:component-scan base-package="com.wby.*"/> -->
+
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" scope="singleton">
+		<property name="dataSource" ref="dataSource" />
+		<!-- <property name="configLocation" value="classpath:mybatis-config.xml"></property> -->
+		<!-- 配置mybatis的xml文件 -->
+		<!-- 
+		<property name="mapperLocations" value="classpath*:sample/config/mappers/**/*.xml" /> 
+		-->
+		<property name="mapperLocations" value="classpath*:com/wby/dao/mapper/*.xml" />
+	</bean>
+	<!-- 配置spring事务 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	 <tx:annotation-driven proxy-target-class="false" transaction-manager="transactionManager" />
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="*" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<aop:pointcut expression="execution(* com.wby.service.impl.*.*(..))"
+			id="txpointcut" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txpointcut" />
+	</aop:config>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.wby.dao" />
+	</bean>
+</beans>
