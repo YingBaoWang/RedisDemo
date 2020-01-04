@@ -19,7 +19,8 @@
       
       
     <!-- 连接池基本参数配置，类似数据库连接池 -->
-    <context:property-placeholder location="classpath*:redis.properties" />
+    <!-- <context:property-placeholder location="classpath*:redis.properties" /> -->
+    <context:property-placeholder location="classpath:redis.properties" />
     <!-- 连接池配置 -->
     <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
         <!-- 最大空闲数 -->
@@ -29,16 +30,27 @@
 		<property name="maxTotal" value="100"></property>
 		<!-- 最大等待时间 -->
 		<property name="maxWaitMillis" value="${redis.maxWait}"></property>
+		
+		
+        <!-- <property name="maxIdle" value="200" />
+        <property name="testOnBorrow" value="true"/>
+    	<property name="maxWaitMillis" value="10000"></property> -->
     </bean>
     
     <!-- 配置连接工厂 -->
     <!-- 连接池配置，类似数据库连接池 -->
     <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" >
-        <property name="hostName" value="${redis.host}"></property>
+        <!-- <property name="hostName" value="127.0.0.1"></property>
+        <property name="port" value="6379"></property>
+        <property name="password" value="root"></property>
+        <property name="poolConfig"  ref="poolConfig"></property>
+        <property name="timeout" value="100000"></property>  -->
+        
+        <property name="hostName" value="${redis.host}"></property> 
         <property name="port" value="${redis.port}"></property>
         <property name="password" value="${redis.pass}"></property>
         <property name="poolConfig"  ref="poolConfig"></property>
-        <property name="timeout" value="${redis.timeout}"></property> 
+        <property name="timeout" value="${redis.timeout}"></property>
     </bean>
     
     <!-- 配置Redis模板对象 -->
@@ -61,7 +73,8 @@
     <!-- 缓存拦截器配置 -->
     <bean id="methodCacheInterceptor" class="com.wby.interceptor.MethodCacheInterceptor">
         <property name="redisUtil" ref="redisUtil"/>
-        <property name="defaultCacheExpireTime" value="${defaultCacheExpireTime}"/>
+        <!-- <property name="defaultCacheExpireTime" value="${defaultCacheExpireTime}"/> -->
+        <property name="defaultCacheExpireTime" value="3600"/>
         <!-- 禁用缓存的类名列表 -->
         <property name="targetNamesList">
             <list>

@@ -18,27 +18,38 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     
+    <context-param>
+    	<param-name>contextConfigLocation</param-name>
+    	<param-value>
+      		classpath:spring*.xml
+    	</param-value>
+  	</context-param>
     
-    <!-- <filter>
-        <filter-name>commonFilter</filter-name>
-        <filter-class>com.wby.interceptor.CommonFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>commonFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping> -->
-    
-    <!-- needed for ContextLoaderListener -->
-	<context-param>
+  	<!-- 针对Spring配置：读取配置文件Redis -->
+	<!-- <context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:springredis.xml</param-value>
+	</context-param> -->
+	
+	<!-- needed for ContextLoaderListener -->
+	<!-- <context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:springbeans.xml</param-value>
-	</context-param>
-
+	</context-param> -->
+	
 	<!-- Bootstraps the root web application context before servlet initialization -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 	
+	<!-- 1.针对Spring配置：读取配置文件 ActiveMQ-->
+  	<!-- <context-param>
+    	<param-name>contextConfigLocation</param-name>
+    	<param-value>
+      		classpath:springactivemq.xml
+    	</param-value>
+  	</context-param> -->
+  	
     <!-- spring mvc容器 -->
 	<servlet>
 		<servlet-name>springDispatcherServlet</servlet-name>
@@ -55,6 +66,5 @@
 		<servlet-name>springDispatcherServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	
 	
 </web-app>

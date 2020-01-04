@@ -9,16 +9,14 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
-	
 	<context:component-scan base-package="com.wby.*">
-		<context:exclude-filter type="annotation"
-			expression="org.springframework.stereotype.Controller" />
-		<context:exclude-filter type="annotation"
-			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+		<context:exclude-filter type="annotation"  expression="org.springframework.web.bind.annotation.ControllerAdvice" />
 	</context:component-scan>
 
 
-	<mybatis-spring:scan base-package="com.wby.dao" />
+<!-- <context:component-scan base-package="com.wby.*"/>  -->
+	<mybatis-spring:scan base-package="com.wby.dao"/>
 
 
 	<context:property-placeholder location="classpath:config.properties" />
@@ -43,25 +41,18 @@
 		<property name="filters" value="stat"></property>
 	</bean>
 	
-
-	<!-- <context:component-scan base-package="com.wby.*"/> -->
-
-
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" scope="singleton">
 		<property name="dataSource" ref="dataSource" />
-		<!-- <property name="configLocation" value="classpath:mybatis-config.xml"></property> -->
+		<property name="configLocation" value="classpath:mybatis-config.xml"></property> 
 		<!-- 配置mybatis的xml文件 -->
-		<!-- 
-		<property name="mapperLocations" value="classpath*:sample/config/mappers/**/*.xml" /> 
-		-->
-		<property name="mapperLocations" value="classpath*:com/wby/dao/mapper/*.xml" />
+		<!-- <property name="mapperLocations" value="classpath*:com/wby/dao/mapper/*.xml" /> -->
 	</bean>
 	<!-- 配置spring事务 -->
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-	 <tx:annotation-driven proxy-target-class="false" transaction-manager="transactionManager" />
+	<tx:annotation-driven proxy-target-class="false" transaction-manager="transactionManager" />
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
 			<tx:method name="get*" read-only="true" />
@@ -69,8 +60,7 @@
 		</tx:attributes>
 	</tx:advice>
 	<aop:config>
-		<aop:pointcut expression="execution(* com.wby.service.impl.*.*(..))"
-			id="txpointcut" />
+		<aop:pointcut expression="execution(* com.wby.service.impl.*.*(..))" id="txpointcut" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="txpointcut" />
 	</aop:config>
 
