@@ -39,17 +39,18 @@ public class ProducerServiceImpl implements ProducerService{
 	 * 向指定队列发送消息
 	 */
 	@Override
-	public void sendMessage(final String msg,String type,boolean isDefault) {
+	public void sendMessage(final String msg,String type,String isDefault) {
 		// TODO Auto-generated method stub
 		Destination destination = queueDestination;
 		JmsTemplate jmsTemplate = new JmsTemplate();
 		//type:1-queue 2-topic
 		if ("1".equalsIgnoreCase(type)) {
 			jmsTemplate = jmsQueueTemplate;
-			destination = true == isDefault?jmsTemplate.getDefaultDestination():queueDestination;
+			//是否默认的队伍|话题 （0否1是）
+			destination = "1".equalsIgnoreCase(isDefault)?jmsTemplate.getDefaultDestination():queueDestination;
 		}else if ("2".equalsIgnoreCase(type)) {
 			jmsTemplate = jmsTopicTemplate;
-			destination = true == isDefault?jmsTemplate.getDefaultDestination():topicDestination;
+			destination = "1".equalsIgnoreCase(isDefault)?jmsTemplate.getDefaultDestination():topicDestination;
 		}
 		send(destination, msg, jmsTemplate);
 	}

@@ -43,7 +43,7 @@ public class test {
 				.filter(integer ->(!(integer.compareTo(Integer.parseInt("6"))<0)))
 				.collect(Collectors.toList());
 		
-		Integer []integers2 = integerList2.stream().toArray(Integer[]::new);
+		//Integer []integers2 = integerList2.stream().toArray(Integer[]::new);
 		
 		integerList2.forEach(System.out::println);
 		System.out.println("*************数组循环赋值***********************");

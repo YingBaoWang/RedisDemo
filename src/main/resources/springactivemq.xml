@@ -78,7 +78,7 @@
         <property name="errorHandler" ref="JmsErrorHandler"/>
         <property name="connectionFactory" ref="connectionFactory" />
         <!-- <property name="destination" ref="queueDestination" /> -->
-        <property name="destination" ref="topicDestination" />
+        <property name="destination" ref="topicDestination2" />
         <property name="messageListener" ref="queueMessageListener" />
     </bean>
 
@@ -97,5 +97,9 @@
     <bean id="topicDestination" class="org.apache.activemq.command.ActiveMQTopic">
         <!-- 定义名称 -->
         <constructor-arg index="0" value="topic"/>
+    </bean>
+    <bean id="topicDestination2" class="org.apache.activemq.command.ActiveMQTopic">
+        <!-- 定义名称 -->
+        <constructor-arg index="0" value="topic2"/>
     </bean>
 </beans>

@@ -29,54 +29,31 @@ public class JmsController {
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:ss");
 	
 	/**
-	 *向指定队列发送消息 
+	 *发送消息 
 	 */
 	@RequestMapping(value="SendMessage",method = RequestMethod.POST)
 	@ResponseBody
 	public void send(HttpServletRequest request){
 		String type = request.getParameter("type");//1-queue 2-topic
+		String isDefault = request.getParameter("isDefault");//0否1是
 		String msg = sdf.format(new Date());
 		
 		System.out.println(Thread.currentThread().getName()+"------------send to jms Start");
-        producerService.sendMessage(msg,type,false);
+        producerService.sendMessage(msg,type,isDefault);
         System.out.println(Thread.currentThread().getName()+"------------send to jms End");
     }
 
 	/**
-	 * 向默认队伍发送消息
-	 */
-	@RequestMapping(value="SendMessage2",method = RequestMethod.POST)
-	@ResponseBody
-	public void send2(HttpServletRequest request){
-		String type = request.getParameter("type");//1-queue 2-topic
-		String msg = sdf.format(new Date());
-		
-		System.out.println(Thread.currentThread().getName()+"------------send to jms Start");
-        producerService.sendMessage(msg,type,true);
-        System.out.println(Thread.currentThread().getName()+"------------send to jms End");
-    }
-	/**
-	 * 接受指定队列消息
+	 * 接受消息
 	 */
     @RequestMapping(value= "/ReceiveMessage",method = RequestMethod.POST)
     @ResponseBody
     public void receive(HttpServletRequest request){
     	String type = request.getParameter("type");//1-queue 2-topic
+    	String isDefault = request.getParameter("isDefault");//0否1是
     	
         System.out.println(Thread.currentThread().getName()+"------------receive from jms Start");
-        consumerService.receive(type,false);
-        System.out.println(Thread.currentThread().getName()+"------------receive from jms End");
-    }
-    /**
-     * 接受默认队列消息
-     */
-    @RequestMapping(value= "/ReceiveMessage2",method = RequestMethod.POST)
-    @ResponseBody
-    public void receive2(HttpServletRequest request){
-    	String type = request.getParameter("type");//1-queue 2-topic
-    	
-    	System.out.println(Thread.currentThread().getName()+"------------receive from jms Start");
-        consumerService.receive(type,true);
+        consumerService.receive(type,isDefault);
         System.out.println(Thread.currentThread().getName()+"------------receive from jms End");
     }
 }
